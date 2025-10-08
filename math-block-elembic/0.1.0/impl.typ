@@ -49,6 +49,9 @@
             e.field("body", content, required: true),
             e.field("desc", e.types.option(content), default: none),
             e.field("numbering", e.types.option(str), default: numbering),
+            e.field("head-fmt", e.types.any, default: head-fmt),
+            e.field("body-fmt", e.types.any, default: body-fmt),
+            e.field("ref-fmt", e.types.any, default: ref-fmt),
             e.field("style", e.types.dict(e.types.any), default: style),
             e.field("number", e.types.option(str), synthesized: true),
         ),
@@ -72,13 +75,13 @@
             block(
                 width: 100%,
                 ..self.style,
-                head-fmt(display, self.number, self.desc) + body-fmt(self.body),
+                (self.head-fmt)(display, self.number, self.desc) + (self.body-fmt)(self.body),
             )
         },
 
         reference: (
             custom: self => {
-                link(self.label, ref-fmt(display, self.number, self.desc))
+                link(self.label, (self.ref-fmt)(display, self.number, self.desc))
             },
         ),
     )

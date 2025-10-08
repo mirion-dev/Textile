@@ -45,6 +45,9 @@
         body,
         desc: none,
         numbering: numbering,
+        head-fmt: head-fmt,
+        body-fmt: body-fmt,
+        ref-fmt: ref-fmt,
         ..extra-style,
     ) => figure(
         kind: "math-block",
