@@ -1,1 +1,1 @@
-#import "impl.typ": contour, plot, point
+#import "mod.typ": contour, plot, point

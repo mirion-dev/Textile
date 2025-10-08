@@ -1,1 +1,1 @@
-#import "impl.typ": *
+#import "mod.typ": *
