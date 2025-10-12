@@ -32,14 +32,14 @@
     #lorem(30)
 ] <p3>
 
-The proof is trivial with @t1.
+The proof of @t1 is trivial.
 
-The theorem is trivial with @p1.
+The theorem becomes trivial with @p1.
 
-The proof is trivial with @t2.
+The proof of @t2 is trivial.
 
-The theorem is trivial with @p2.
+The theorem becomes trivial with @p2.
 
-The proof is trivial with @t3.
+The proof of @t3 is trivial.
 
-The theorem is trivial with @p3.
+The theorem becomes trivial with @p3.
