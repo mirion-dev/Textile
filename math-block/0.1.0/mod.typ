@@ -80,7 +80,7 @@
 #let math-block-init = doc => {
     show figure.where(kind: "math-block"): set align(left)
     show ref: el => {
-        if el.element.func() != figure or el.element.kind != "math-block" {
+        if el.element == none or el.element.func() != figure or el.element.kind != "math-block" {
             return el
         }
 
