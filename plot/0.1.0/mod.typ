@@ -66,15 +66,15 @@
         }
 
         if type(pos) == angle or type(pos.at(1)) == angle {
-            let (center, end) = if type(pos) == angle {
+            let (center, stop) = if type(pos) == angle {
                 ((0, 0), pos)
             } else {
                 (absolute(pos.at(0)), pos.at(1))
             }
 
-            let (begin, radius) = relative(prev, center)
-            draw.arc((to: center, rel: (begin, radius)), start: begin, stop: end, radius: radius, ..style)
-            prev = absolute((center, (end, radius)))
+            let (start, radius) = relative(prev, center)
+            draw.arc((to: center, rel: (start, radius)), start: start, stop: stop, radius: radius, ..style)
+            prev = absolute((center, (stop, radius)))
         } else {
             pos = absolute(pos)
             draw.line(prev, pos, ..style)
