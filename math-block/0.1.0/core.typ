@@ -1,4 +1,9 @@
-#let default-head-fmt = (display, number, desc) => {
+/// - display (str, content):
+/// - number (str, none):
+/// - desc (str, content, none):
+/// - meta (any):
+/// -> content
+#let default-head-fmt(display, number, desc, meta) = {
     if number != none {
         if desc != none {
             [*#display #number* (#desc)*.* ]
@@ -12,9 +17,18 @@
     }
 }
 
-#let default-body-fmt = body => body
+/// - body (str, content):
+/// - meta (any):
+/// -> content
+#let default-body-fmt(body, meta) = body
 
-#let default-ref-fmt = (supplement, display, number, desc) => {
+/// - supplement (str, content, auto):
+/// - display (str, content):
+/// - number (str, none):
+/// - desc (str, content, none):
+/// - meta (any):
+/// -> content
+#let default-ref-fmt(supplement, display, number, desc, meta) = {
     if supplement != auto {
         supplement
     } else if number != none {
@@ -26,12 +40,24 @@
     }
 }
 
+/// - identifier (str):
+/// - namespace (str):
+/// - display (str, content, auto):
+/// - counter (dictionary, none):
+/// - numbering (str, function, none):
+/// - meta (any):
+/// - head-fmt (function):
+/// - body-fmt (function):
+/// - ref-fmt (function):
+/// - style (arguments):
+/// -> function
 #let math-block(
     identifier,
     namespace: "default",
     display: auto,
     counter: none,
     numbering: "1.1",
+    meta: none,
     head-fmt: default-head-fmt,
     body-fmt: default-body-fmt,
     ref-fmt: default-ref-fmt,
@@ -45,6 +71,7 @@
         body,
         desc: none,
         numbering: numbering,
+        meta: meta,
         head-fmt: head-fmt,
         body-fmt: body-fmt,
         ref-fmt: ref-fmt,
@@ -64,29 +91,31 @@
                     number = (counter.display)(numbering)
                 }
 
-                [#metadata((ref-fmt, display, number, desc)) <math-block-meta>]
+                [#metadata((ref-fmt, display, number, desc, meta)) <math-block-meta>]
 
                 block(
                     width: 100%,
                     ..style,
                     ..extra-style,
-                    head-fmt(display, number, desc) + body-fmt(body),
+                    head-fmt(display, number, desc, meta) + body-fmt(body, meta),
                 )
             }
         },
     )
 }
 
-#let math-block-init = doc => {
+/// - doc (content):
+/// -> content
+#let math-block-init(doc) = {
     show figure.where(kind: "math-block"): set align(left)
     show ref: el => {
         if el.element == none or el.element.func() != figure or el.element.kind != "math-block" {
             return el
         }
 
-        let meta = query(selector(<math-block-meta>).after(el.target)).first()
-        let (ref-fmt, display, number, desc) = meta.value
-        link(meta.location(), ref-fmt(el.supplement, display, number, desc))
+        let metadata = query(selector(<math-block-meta>).after(el.target)).first()
+        let (ref-fmt, display, number, desc, meta) = metadata.value
+        link(metadata.location(), ref-fmt(el.supplement, display, number, desc, meta))
     }
     doc
 }

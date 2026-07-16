@@ -3,7 +3,11 @@
 
 #let counter-theorem = rich-counter(identifier: "theorem")
 
-#let theorem = math-block("Theorem", counter: counter-theorem)
+#let theorem = math-block(
+    "Theorem",
+    counter: counter-theorem,
+    head-fmt: (display, number, desc, meta) => default-head-fmt(meta + display, number, desc, none),
+)
 #let proof = math-block("Proof")
 
 #show: math-block-init
@@ -24,7 +28,7 @@
     #lorem(30)
 ]
 
-#theorem(label: <t3>)[
+#theorem(label: <t3>, meta: "*")[
     #lorem(30)
 ]
 

@@ -1,6 +1,11 @@
 #import "@preview/elembic:1.1.1" as e
 
-#let default-head-fmt = (display, number, desc) => {
+/// - display (str, content):
+/// - number (str, none):
+/// - desc (str, content, none):
+/// - meta (any):
+/// -> content
+#let default-head-fmt(display, number, desc, meta) = {
     if number != none {
         if desc != none {
             [*#display #number* (#desc)*.* ]
@@ -14,9 +19,17 @@
     }
 }
 
-#let default-body-fmt = body => body
+/// - body (str, content):
+/// - meta (any):
+/// -> content
+#let default-body-fmt(body, meta) = body
 
-#let default-ref-fmt = (display, number, desc) => {
+/// - display (str, content):
+/// - number (str, none):
+/// - desc (str, content, none):
+/// - meta (any):
+/// -> content
+#let default-ref-fmt(display, number, desc, meta) = {
     if number != none {
         [#display #number]
     } else if desc != none {
@@ -26,12 +39,24 @@
     }
 }
 
+/// - identifier (str):
+/// - namespace (str):
+/// - display (str, content, auto):
+/// - counter (dictionary, none):
+/// - numbering (str, function, none):
+/// - meta (any):
+/// - head-fmt (function):
+/// - body-fmt (function):
+/// - ref-fmt (function):
+/// - style (dictionary):
+/// -> function
 #let math-block(
     identifier,
     namespace: "default",
     display: auto,
     counter: none,
     numbering: "1.1",
+    meta: none,
     head-fmt: default-head-fmt,
     body-fmt: default-body-fmt,
     ref-fmt: default-ref-fmt,
@@ -46,13 +71,14 @@
         prefix: namespace,
 
         fields: (
-            e.field("body", content, required: true),
-            e.field("desc", e.types.option(content), default: none),
-            e.field("numbering", e.types.option(str), default: numbering),
-            e.field("head-fmt", e.types.any, default: head-fmt),
-            e.field("body-fmt", e.types.any, default: body-fmt),
-            e.field("ref-fmt", e.types.any, default: ref-fmt),
-            e.field("style", e.types.dict(e.types.any), default: style),
+            e.field("body", e.types.union(str, content), required: true),
+            e.field("desc", e.types.option(e.types.union(str, content))),
+            e.field("numbering", e.types.option(e.types.union(str, function)), default: numbering),
+            e.field("meta", e.types.any, default: meta),
+            e.field("head-fmt", function, default: head-fmt),
+            e.field("body-fmt", function, default: body-fmt),
+            e.field("ref-fmt", function, default: ref-fmt),
+            e.field("style", dictionary, default: style),
             e.field("number", e.types.option(str), synthesized: true),
         ),
 
@@ -75,13 +101,13 @@
             block(
                 width: 100%,
                 ..self.style,
-                (self.head-fmt)(display, self.number, self.desc) + (self.body-fmt)(self.body),
+                (self.head-fmt)(display, self.number, self.desc, self.meta) + (self.body-fmt)(self.body, self.meta),
             )
         },
 
         reference: (
             custom: self => {
-                link(self.label, (self.ref-fmt)(display, self.number, self.desc))
+                link(self.label, (self.ref-fmt)(display, self.number, self.desc, self.meta))
             },
         ),
     )
