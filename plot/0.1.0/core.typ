@@ -1,6 +1,18 @@
 #import "utils.typ": *
 #import "@preview/cetz:0.4.2": canvas, draw
 
+/// - objects (any):
+/// - unit-length (length):
+/// - x-range (array, int, float):
+/// - y-range (array, int, float):
+/// - padding (int, float):
+/// - x-label (str, content, none):
+/// - y-label (str, content, none):
+/// - x-ticks (array, none):
+/// - y-ticks (array, none):
+/// - tick-size (int, float):
+/// - tick-padding (int, float):
+/// -> content
 #let plot(
     objects,
     unit-length: 3em,
@@ -47,6 +59,12 @@
     ),
 )
 
+/// - pos (array):
+/// - size (int, float):
+/// - label (str, content, none):
+/// - anchor (str):
+/// - padding (int, float):
+/// -> content
 #let point(pos, size: .08, label: none, anchor: "south", padding: .2) = {
     pos = absolute(pos)
     draw.circle(pos, radius: size, fill: black, stroke: none)
@@ -55,6 +73,8 @@
     }
 }
 
+/// - path (arguments):
+/// -> content
 #let contour(..path) = {
     let prev = absolute(path.at(0))
     for pos in path.pos().slice(1) {

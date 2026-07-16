@@ -1,3 +1,5 @@
+/// - range (array, int, float):
+/// -> array
 #let normalize-range(range) = {
     if type(range) == array {
         range
@@ -6,6 +8,8 @@
     }
 }
 
+/// - tick (any):
+/// -> array
 #let normalize-tick(tick) = {
     if type(tick) == array {
         tick
@@ -14,6 +18,8 @@
     }
 }
 
+/// - pos (array):
+/// -> array
 #let absolute(pos) = {
     if type(pos.at(0)) == array {
         let ((x, y), (a, r)) = pos
@@ -26,6 +32,9 @@
     }
 }
 
+/// - pos (array):
+/// - rel (array):
+/// -> array
 #let relative(pos, rel) = {
     let dx = pos.at(0) - rel.at(0)
     let dy = pos.at(1) - rel.at(1)
