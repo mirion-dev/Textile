@@ -113,7 +113,9 @@
     )
 }
 
-#let math-block-init = doc => {
+/// - doc (content):
+/// -> content
+#let math-block-init(doc) = {
     show: e.prepare()
     doc
 }
