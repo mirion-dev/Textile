@@ -6,7 +6,7 @@
 #let theorem = math-block(
     "Theorem",
     counter: counter-theorem,
-    head-fmt: (display, number, desc, meta) => default-head-fmt(meta + display, number, desc, none),
+    head-fmt: (display, number, desc, prefix: none) => default-head-fmt(prefix + display, number, desc, none),
 )
 #let proof = math-block("Proof")
 
@@ -28,7 +28,7 @@
     #lorem(30)
 ] <p2>
 
-#theorem(meta: "*")[
+#theorem(prefix: "*")[
     #lorem(30)
 ] <t3>
 
