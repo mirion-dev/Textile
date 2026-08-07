@@ -1,4 +1,4 @@
-#import "@preview/elembic:1.1.1" as e
+#import "deps.typ": elembic as e
 
 /// - display (str, content):
 /// - number (str, none):

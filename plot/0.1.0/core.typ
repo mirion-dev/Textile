@@ -1,5 +1,5 @@
-#import "utils.typ": *
-#import "@preview/cetz:0.4.2": canvas, draw
+#import "deps.typ": cetz as c
+#import "utils.typ": absolute, normalize-range, normalize-tick, relative
 
 /// - objects (any):
 /// - unit-length (length):
@@ -27,30 +27,30 @@
     tick-padding: .1,
 ) = align(
     center,
-    canvas(
+    c.canvas(
         length: unit-length,
         {
             let (x-min, x-max) = normalize-range(x-range)
             let (y-min, y-max) = normalize-range(y-range)
             tick-padding += tick-size / 2
-            draw.line((x-min - padding, 0), (x-max + padding, 0), mark: (end: "stealth", fill: black))
-            draw.line((0, y-min - padding), (0, y-max + padding), mark: (end: "stealth", fill: black))
-            draw.content((x-max + padding, 0), x-label, anchor: "north-east", padding: (tick-padding, 0))
-            draw.content((0, y-max + padding), y-label, anchor: "north-west", padding: (0, tick-padding))
+            c.draw.line((x-min - padding, 0), (x-max + padding, 0), mark: (end: "stealth", fill: black))
+            c.draw.line((0, y-min - padding), (0, y-max + padding), mark: (end: "stealth", fill: black))
+            c.draw.content((x-max + padding, 0), x-label, anchor: "north-east", padding: (tick-padding, 0))
+            c.draw.content((0, y-max + padding), y-label, anchor: "north-west", padding: (0, tick-padding))
 
             if x-ticks != none {
                 for x in x-ticks {
                     let (x, label) = normalize-tick(x)
-                    draw.line((x, -tick-size / 2), (x, tick-size / 2))
-                    draw.content((x, 0), label, anchor: "north", padding: tick-padding)
+                    c.draw.line((x, -tick-size / 2), (x, tick-size / 2))
+                    c.draw.content((x, 0), label, anchor: "north", padding: tick-padding)
                 }
             }
 
             if y-ticks != none {
                 for y in y-ticks {
                     let (y, label) = normalize-tick(y)
-                    draw.line((-tick-size / 2, y), (tick-size / 2, y))
-                    draw.content((0, y), label, anchor: "east", padding: tick-padding)
+                    c.draw.line((-tick-size / 2, y), (tick-size / 2, y))
+                    c.draw.content((0, y), label, anchor: "east", padding: tick-padding)
                 }
             }
 
@@ -67,9 +67,9 @@
 /// -> content
 #let point(pos, size: .08, label: none, anchor: "south", padding: .2) = {
     pos = absolute(pos)
-    draw.circle(pos, radius: size, fill: black, stroke: none)
+    c.draw.circle(pos, radius: size, fill: black, stroke: none)
     if label != none {
-        draw.content(pos, label, anchor: anchor, padding: padding)
+        c.draw.content(pos, label, anchor: anchor, padding: padding)
     }
 }
 
@@ -93,11 +93,11 @@
             }
 
             let (start, radius) = relative(prev, center)
-            draw.arc((to: center, rel: (start, radius)), start: start, stop: stop, radius: radius, ..style)
+            c.draw.arc((to: center, rel: (start, radius)), start: start, stop: stop, radius: radius, ..style)
             prev = absolute((center, (stop, radius)))
         } else {
             pos = absolute(pos)
-            draw.line(prev, pos, ..style)
+            c.draw.line(prev, pos, ..style)
             prev = pos
         }
     }
