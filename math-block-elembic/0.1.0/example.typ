@@ -1,7 +1,7 @@
 #import "lib.typ": *
-#import "@preview/rich-counters:0.2.2": *
+#import "@local/richer-counters:0.1.0": *
 
-#let counter-theorem = rich-counter(identifier: "theorem")
+#let counter-theorem = richer-counter(identifier: "theorem")
 
 #let theorem = math-block(
     "Theorem",
