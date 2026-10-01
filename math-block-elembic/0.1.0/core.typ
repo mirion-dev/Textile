@@ -52,7 +52,7 @@
 /// -> function
 #let math-block(
     identifier,
-    namespace: "default",
+    namespace: "math-block.default",
     display: auto,
     counter: none,
     numbering: "1.1",
@@ -69,6 +69,7 @@
     e.element.declare(
         identifier,
         prefix: namespace,
+        count: none, // `count` does not support common counters.
 
         fields: (
             e.field("body", e.types.union(str, content), required: true),
@@ -77,7 +78,7 @@
             e.field("head-fmt", function, default: head-fmt),
             e.field("body-fmt", function, default: body-fmt),
             e.field("ref-fmt", function, default: ref-fmt),
-            e.field("style", dictionary, default: style),
+            e.field("style", dictionary, default: (width: 100%, ..style)),
             e.field("meta", dictionary, default: meta.named()),
             e.field("number", e.types.option(str), synthesized: true),
         ),
@@ -86,7 +87,8 @@
             self.number = none
             if counter != none and self.numbering != none {
                 let numbers = (counter.get)()
-                numbers.at(-1) += 1
+                numbers.at(-1) += 1 // `synthesize` is prior to `display`.
+
                 self.number = std.numbering(self.numbering, ..numbers)
             }
 
@@ -99,7 +101,6 @@
             }
 
             block(
-                width: 100%,
                 ..self.style,
                 (self.head-fmt)(display, self.number, self.desc, ..self.meta) + (self.body-fmt)(self.body, ..self.meta),
             )
