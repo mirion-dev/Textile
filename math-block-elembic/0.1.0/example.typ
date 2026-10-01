@@ -12,29 +12,29 @@
 
 #show: math-block-init
 
-#theorem(label: <t1>, desc: [Alice])[
+#theorem(desc: [Alice])[
     #lorem(30)
-]
+] <t1>
 
-#proof(label: <p1>, desc: [Bob's Proof])[
+#proof(desc: [Bob's Proof])[
     #lorem(30)
-]
+] <p1>
 
-#theorem(label: <t2>, desc: [Carol's Theorem], numbering: none)[
+#theorem(desc: [Carol's Theorem], numbering: none)[
     #lorem(30)
-]
+] <t2>
 
-#proof(label: <p2>)[
+#proof[
     #lorem(30)
-]
+] <p2>
 
-#theorem(label: <t3>, meta: (prefix: "*"))[
+#theorem(meta: (prefix: "*"))[
     #lorem(30)
-]
+] <t3>
 
-#proof(label: <p3>)[
+#proof[
     #lorem(30)
-]
+] <p3>
 
 The proof of @t1 is trivial.
 

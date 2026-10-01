@@ -24,13 +24,16 @@
 /// -> content
 #let default-body-fmt(body, ..meta) = body
 
+/// - supplement (str, content, auto):
 /// - display (str, content):
 /// - number (str, none):
 /// - desc (str, content, none):
 /// - meta (arguments):
 /// -> content
-#let default-ref-fmt(display, number, desc, ..meta) = {
-    if number != none {
+#let default-ref-fmt(supplement, display, number, desc, ..meta) = {
+    if supplement != auto {
+        supplement
+    } else if number != none {
         [#display #number]
     } else if desc != none {
         desc
@@ -69,7 +72,6 @@
     e.element.declare(
         identifier,
         prefix: namespace,
-        count: none, // `count` does not support common counters.
 
         fields: (
             e.field("body", e.types.union(str, content), required: true),
@@ -82,6 +84,13 @@
             e.field("meta", dictionary, default: meta.named()),
             e.field("number", e.types.option(str), synthesized: true),
         ),
+
+        // `count` does not support common counters.
+        count: none,
+
+        // `reference` does not pass `supplement` to `custom`.
+        labelable: false,
+        reference: none,
 
         synthesize: self => {
             self.number = none
@@ -100,17 +109,13 @@
                 (counter.step)()
             }
 
+            [#metadata((self.ref-fmt, display, self.number, self.desc, self.meta)) <math-block-meta>]
+
             block(
                 ..self.style,
                 (self.head-fmt)(display, self.number, self.desc, ..self.meta) + (self.body-fmt)(self.body, ..self.meta),
             )
         },
-
-        reference: (
-            custom: self => {
-                link(self.label, (self.ref-fmt)(display, self.number, self.desc, ..self.meta))
-            },
-        ),
     )
 }
 
@@ -118,5 +123,16 @@
 /// -> content
 #let math-block-init(doc) = {
     show: e.prepare()
+
+    show ref: el => {
+        if el.element == none or el.element.func() != [].func() or el.element.children.len() != 2 or el.element.children.last().value.data-kind != "element-instance" {
+            return el
+        }
+
+        let metadata = query(selector(<math-block-meta>).after(el.target)).first()
+        let (ref-fmt, display, number, desc, meta) = metadata.value
+        link(el.target, ref-fmt(el.supplement, display, number, desc, ..meta))
+    }
+
     doc
 }
