@@ -53,7 +53,7 @@
 /// -> function
 #let math-block(
     identifier,
-    namespace: "default",
+    namespace: "math-block.default",
     display: auto,
     counter: none,
     numbering: "1.1",
