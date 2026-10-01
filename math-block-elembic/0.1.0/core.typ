@@ -85,6 +85,20 @@
             e.field("number", e.types.option(str), synthesized: true),
         ),
 
+        parse-args: (default-parser, fields: (:), typecheck: true) => (args, include-required: true) => {
+            let named = (:)
+            let meta = (:)
+            for (key, value) in args.named() {
+                if key in fields.user-named-fields.keys() {
+                    named.insert(key, value)
+                } else {
+                    meta.insert(key, value)
+                }
+            }
+
+            default-parser(arguments(..args.pos(), meta: meta, ..named), include-required: include-required)
+        },
+
         // `count` does not support common counters.
         count: none,
 

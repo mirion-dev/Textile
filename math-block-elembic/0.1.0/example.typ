@@ -28,7 +28,7 @@
     #lorem(30)
 ] <p2>
 
-#theorem(meta: (prefix: "*"))[
+#theorem(prefix: "*")[
     #lorem(30)
 ] <t3>
 
