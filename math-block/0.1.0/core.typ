@@ -120,7 +120,7 @@
 
         let metadata = query(selector(<math-block-meta>).after(el.target)).first()
         let (ref-fmt, display, number, desc, meta) = metadata.value
-        link(metadata.location(), ref-fmt(el.supplement, display, number, desc, ..meta))
+        link(el.target, ref-fmt(el.supplement, display, number, desc, ..meta))
     }
     doc
 }
