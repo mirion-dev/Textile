@@ -88,7 +88,7 @@
                 (counter.step)()
             }
 
-            let style = (:..default-style, ..style)
+            let style = (width: 100%, ..default-style, ..style)
             let meta = (:..default-meta.named(), ..meta.named())
 
             context {
@@ -99,11 +99,10 @@
 
                 [#metadata((ref-fmt, display, number, desc, meta)) <math-block-meta>]
 
-                block(
-                    width: 100%,
+                align(left, block(
                     ..style,
                     head-fmt(display, number, desc, ..meta) + body-fmt(body, ..meta),
-                )
+                ))
             }
         },
     )
@@ -112,7 +111,6 @@
 /// - doc (content):
 /// -> content
 #let math-block-init(doc) = {
-    show figure.where(kind: "math-block"): set align(left)
     show ref: el => {
         if el.element == none or el.element.func() != figure or el.element.kind != "math-block" {
             return el
@@ -122,5 +120,6 @@
         let (ref-fmt, display, number, desc, meta) = metadata.value
         link(el.target, ref-fmt(el.supplement, display, number, desc, ..meta))
     }
+
     doc
 }
