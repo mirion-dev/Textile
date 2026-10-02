@@ -139,12 +139,12 @@
     show: e.prepare()
 
     show ref: el => {
-        if el.element == none or el.element.func() != [].func() or el.element.children.len() != 2 or el.element.children.last().value.data-kind != "element-instance" {
+        let eid = e.eid(el.element)
+        if eid == none or not eid.starts-with("e_math-block.") {
             return el
         }
 
-        let metadata = query(selector(<math-block-meta>).after(el.target)).first()
-        let (ref-fmt, display, number, desc, meta) = metadata.value
+        let (ref-fmt, display, number, desc, meta) = query(selector(<math-block-meta>).after(el.target)).first().value
         link(el.target, ref-fmt(el.supplement, display, number, desc, ..meta))
     }
 
