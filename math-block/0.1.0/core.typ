@@ -53,7 +53,7 @@
 /// -> function
 #let math-block(
     identifier,
-    namespace: "math-block.default",
+    namespace: "default",
     display: auto,
     counter: none,
     numbering: "1.1",
@@ -99,7 +99,7 @@
         ..meta,
     ) => figure(
         kind: "math-block",
-        supplement: namespace + "." + identifier,
+        supplement: "math-block." + namespace + "." + identifier,
         outlined: false,
         {
             if counter != none and numbering != none {

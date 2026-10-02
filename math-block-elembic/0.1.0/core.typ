@@ -55,7 +55,7 @@
 /// -> function
 #let math-block(
     identifier,
-    namespace: "math-block.default",
+    namespace: "default",
     display: auto,
     counter: none,
     numbering: "1.1",
@@ -71,7 +71,7 @@
 
     e.element.declare(
         identifier,
-        prefix: namespace,
+        prefix: "math-block." + namespace,
 
         fields: (
             e.field("body", e.types.union(str, content), required: true),
