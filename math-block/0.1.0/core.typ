@@ -117,7 +117,7 @@
 
                 [#metadata((ref-fmt, display, number, name, meta)) <math-block-meta>]
 
-                align(left, block(..style, head-fmt(display, number, name, ..meta) + body-fmt(body, ..meta)))
+                block(..style, head-fmt(display, number, name, ..meta) + body-fmt(body, ..meta))
             }
         },
     )
@@ -126,6 +126,11 @@
 /// - doc (content):
 /// -> content
 #let math-block-init(doc) = {
+    show figure.where(kind: "math-block"): el => {
+        set block(breakable: true)
+        align(left, el)
+    }
+
     show ref: el => {
         if el.element == none or el.element.func() != figure or el.element.kind != "math-block" {
             return el
