@@ -6,7 +6,7 @@
 #let theorem = math-block(
     "Theorem",
     counter: counter-theorem,
-    head-fmt: default-fmt => (display, number, name, prefix: none) => default-fmt(prefix + display, number, name, none),
+    head-fmt: default-fmt => (display, number, name, prefix: none) => default-fmt(prefix + display, number, name),
 )
 #let proof = math-block("Proof")
 

@@ -2,18 +2,18 @@
 
 /// - display (str, content):
 /// - number (str, none):
-/// - desc (str, content, none):
+/// - name (str, content, none):
 /// - meta (arguments):
 /// -> content
-#let default-head-fmt(display, number, desc, ..meta) = {
+#let default-head-fmt(display, number, name, ..meta) = {
     if number != none {
-        if desc != none {
-            [*#display #number* (#desc)*.* ]
+        if name != none {
+            [*#display #number* (#name)*.* ]
         } else {
             [*#display #number.* ]
         }
-    } else if desc != none {
-        [*#desc.* ]
+    } else if name != none {
+        [*#name.* ]
     } else {
         [*#display.* ]
     }
@@ -27,16 +27,16 @@
 /// - supplement (str, content, auto):
 /// - display (str, content):
 /// - number (str, none):
-/// - desc (str, content, none):
+/// - name (str, content, none):
 /// - meta (arguments):
 /// -> content
-#let default-ref-fmt(supplement, display, number, desc, ..meta) = {
+#let default-ref-fmt(supplement, display, number, name, ..meta) = {
     if supplement != auto {
         supplement
     } else if number != none {
         [#display #number]
-    } else if desc != none {
-        desc
+    } else if name != none {
+        name
     } else {
         display
     }
@@ -47,9 +47,9 @@
 /// - display (str, content, auto):
 /// - counter (dictionary, none):
 /// - numbering (str, function, none):
-/// - head-fmt (function):
-/// - body-fmt (function):
-/// - ref-fmt (function):
+/// - head-fmt (function, auto):
+/// - body-fmt (function, auto):
+/// - ref-fmt (function, auto):
 /// - style (dictionary):
 /// - meta (arguments):
 /// -> function
@@ -59,14 +59,32 @@
     display: auto,
     counter: none,
     numbering: "1.1",
-    head-fmt: default-head-fmt,
-    body-fmt: default-body-fmt,
-    ref-fmt: default-ref-fmt,
+    head-fmt: auto,
+    body-fmt: auto,
+    ref-fmt: auto,
     style: (:),
     ..meta,
 ) = {
     if display == auto {
         display = identifier
+    }
+
+    if head-fmt == auto {
+        head-fmt = default-head-fmt
+    } else {
+        head-fmt = head-fmt(default-head-fmt)
+    }
+
+    if body-fmt == auto {
+        body-fmt = default-body-fmt
+    } else {
+        body-fmt = body-fmt(default-body-fmt)
+    }
+
+    if ref-fmt == auto {
+        ref-fmt = default-ref-fmt
+    } else {
+        ref-fmt = ref-fmt(default-ref-fmt)
     }
 
     e.element.declare(
@@ -75,7 +93,7 @@
 
         fields: (
             e.field("body", e.types.union(str, content), required: true),
-            e.field("desc", e.types.option(e.types.union(str, content)), default: none),
+            e.field("name", e.types.option(e.types.union(str, content)), default: none),
             e.field("numbering", e.types.option(e.types.union(str, function)), default: numbering),
             e.field("head-fmt", function, default: head-fmt),
             e.field("body-fmt", function, default: body-fmt),
@@ -123,11 +141,11 @@
                 (counter.step)()
             }
 
-            [#metadata((self.ref-fmt, display, self.number, self.desc, self.meta)) <math-block-meta>]
+            [#metadata((self.ref-fmt, display, self.number, self.name, self.meta)) <math-block-meta>]
 
             block(
                 ..self.style,
-                (self.head-fmt)(display, self.number, self.desc, ..self.meta) + (self.body-fmt)(self.body, ..self.meta),
+                (self.head-fmt)(display, self.number, self.name, ..self.meta) + (self.body-fmt)(self.body, ..self.meta),
             )
         },
     )
@@ -144,8 +162,8 @@
             return el
         }
 
-        let (ref-fmt, display, number, desc, meta) = query(selector(<math-block-meta>).after(el.target)).first().value
-        link(el.target, ref-fmt(el.supplement, display, number, desc, ..meta))
+        let (ref-fmt, display, number, name, meta) = query(selector(<math-block-meta>).after(el.target)).first().value
+        link(el.target, ref-fmt(el.supplement, display, number, name, ..meta))
     }
 
     doc
