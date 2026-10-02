@@ -6,21 +6,21 @@
 #let theorem = math-block(
     "Theorem",
     counter: counter-theorem,
-    head-fmt: default-fmt => (display, number, desc, prefix: none) => default-fmt(prefix + display, number, desc, none),
+    head-fmt: default-fmt => (display, number, name, prefix: none) => default-fmt(prefix + display, number, name, none),
 )
 #let proof = math-block("Proof")
 
 #show: math-block-init
 
-#theorem(desc: [Alice])[
+#theorem(name: [Alice])[
     #lorem(30)
 ] <t1>
 
-#proof(desc: [Bob's Proof])[
+#proof(name: [Bob's Proof])[
     #lorem(30)
 ] <p1>
 
-#theorem(desc: [Carol's Theorem], numbering: none)[
+#theorem(name: [Carol's Theorem], numbering: none)[
     #lorem(30)
 ] <t2>
 

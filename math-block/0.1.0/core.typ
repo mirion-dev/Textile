@@ -1,17 +1,17 @@
 /// - display (str, content):
 /// - number (str, none):
-/// - desc (str, content, none):
+/// - name (str, content, none):
 /// - meta (arguments):
 /// -> content
-#let default-head-fmt(display, number, desc, ..meta) = {
+#let default-head-fmt(display, number, name, ..meta) = {
     if number != none {
-        if desc != none {
-            [*#display #number* (#desc)*.* ]
+        if name != none {
+            [*#display #number* (#name)*.* ]
         } else {
             [*#display #number.* ]
         }
-    } else if desc != none {
-        [*#desc.* ]
+    } else if name != none {
+        [*#name.* ]
     } else {
         [*#display.* ]
     }
@@ -25,16 +25,16 @@
 /// - supplement (str, content, auto):
 /// - display (str, content):
 /// - number (str, none):
-/// - desc (str, content, none):
+/// - name (str, content, none):
 /// - meta (arguments):
 /// -> content
-#let default-ref-fmt(supplement, display, number, desc, ..meta) = {
+#let default-ref-fmt(supplement, display, number, name, ..meta) = {
     if supplement != auto {
         supplement
     } else if number != none {
         [#display #number]
-    } else if desc != none {
-        desc
+    } else if name != none {
+        name
     } else {
         display
     }
@@ -90,7 +90,7 @@
 
     (
         body,
-        desc: none,
+        name: none,
         numbering: numbering,
         head-fmt: head-fmt,
         body-fmt: body-fmt,
@@ -115,9 +115,9 @@
                     number = (counter.display)(numbering)
                 }
 
-                [#metadata((ref-fmt, display, number, desc, meta)) <math-block-meta>]
+                [#metadata((ref-fmt, display, number, name, meta)) <math-block-meta>]
 
-                align(left, block(..style, head-fmt(display, number, desc, ..meta) + body-fmt(body, ..meta)))
+                align(left, block(..style, head-fmt(display, number, name, ..meta) + body-fmt(body, ..meta)))
             }
         },
     )
@@ -131,8 +131,8 @@
             return el
         }
 
-        let (ref-fmt, display, number, desc, meta) = query(selector(<math-block-meta>).after(el.target)).first().value
-        link(el.target, ref-fmt(el.supplement, display, number, desc, ..meta))
+        let (ref-fmt, display, number, name, meta) = query(selector(<math-block-meta>).after(el.target)).first().value
+        link(el.target, ref-fmt(el.supplement, display, number, name, ..meta))
     }
 
     doc
