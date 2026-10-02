@@ -63,18 +63,18 @@
 
         let k = r1 / 4.5
         let l1 = (
-            $2 pi "i"$,
-            $4 pi "i"$,
+            $2 pi upright(i)$,
+            $4 pi upright(i)$,
             $space dots.v$,
-            $2N pi "i"$,
-            $(2N+2) pi "i"$,
+            $2N pi upright(i)$,
+            $(2N+2) pi upright(i)$,
         )
         let l2 = (
-            $-2 pi "i"$,
-            $-4 pi "i"$,
+            $-2 pi upright(i)$,
+            $-4 pi upright(i)$,
             $space dots.v$,
-            $-2N pi "i"$,
-            $-(2N+2) pi "i"$,
+            $-2N pi upright(i)$,
+            $-(2N+2) pi upright(i)$,
         )
         point((0, 0))
         for i in range(5) {
