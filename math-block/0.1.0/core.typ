@@ -45,9 +45,9 @@
 /// - display (str, content, auto):
 /// - counter (dictionary, none):
 /// - numbering (str, function, none):
-/// - head-fmt (function):
-/// - body-fmt (function):
-/// - ref-fmt (function):
+/// - head-fmt (function, auto):
+/// - body-fmt (function, auto):
+/// - ref-fmt (function, auto):
 /// - style (dictionary):
 /// - meta (arguments):
 /// -> function
@@ -57,14 +57,32 @@
     display: auto,
     counter: none,
     numbering: "1.1",
-    head-fmt: default-head-fmt,
-    body-fmt: default-body-fmt,
-    ref-fmt: default-ref-fmt,
+    head-fmt: auto,
+    body-fmt: auto,
+    ref-fmt: auto,
     style: (:),
     ..meta,
 ) = {
     if display == auto {
         display = identifier
+    }
+
+    if head-fmt == auto {
+        head-fmt = default-head-fmt
+    } else {
+        head-fmt = head-fmt(default-head-fmt)
+    }
+
+    if body-fmt == auto {
+        body-fmt = default-body-fmt
+    } else {
+        body-fmt = body-fmt(default-body-fmt)
+    }
+
+    if ref-fmt == auto {
+        ref-fmt = default-ref-fmt
+    } else {
+        ref-fmt = ref-fmt(default-ref-fmt)
     }
 
     let default-style = style
@@ -99,10 +117,7 @@
 
                 [#metadata((ref-fmt, display, number, desc, meta)) <math-block-meta>]
 
-                align(left, block(
-                    ..style,
-                    head-fmt(display, number, desc, ..meta) + body-fmt(body, ..meta),
-                ))
+                align(left, block(..style, head-fmt(display, number, desc, ..meta) + body-fmt(body, ..meta)))
             }
         },
     )
@@ -116,8 +131,7 @@
             return el
         }
 
-        let metadata = query(selector(<math-block-meta>).after(el.target)).first()
-        let (ref-fmt, display, number, desc, meta) = metadata.value
+        let (ref-fmt, display, number, desc, meta) = query(selector(<math-block-meta>).after(el.target)).first().value
         link(el.target, ref-fmt(el.supplement, display, number, desc, ..meta))
     }
 
